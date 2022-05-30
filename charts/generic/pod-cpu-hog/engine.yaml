@@ -5,6 +5,11 @@ metadata:
   name: nginx-chaos
   namespace: default
 spec:
+  components:
+    runner:
+      # secret name for the runner image, if using private registry
+      imagePullSecrets:
+      - name: docker-vendor
   # It can be active/stop
   engineState: 'active'
   appinfo:
@@ -16,6 +21,9 @@ spec:
     - name: pod-cpu-hog
       spec:
         components:
+          # secret name for the experiment image, if using private registry
+          experimentImagePullSecrets:
+          - name: docker-vendor
           env:
             - name: TOTAL_CHAOS_DURATION
               value: '60' # in seconds
@@ -34,3 +42,6 @@ spec:
             # provide the socket file path
             - name: SOCKET_PATH
               value: '/var/run/docker.sock'    
+
+            - name: LIB_IMAGE
+              value: 'scbs.jfrog.io/docker-remote/chaosnative/go-runner:2.8.0'

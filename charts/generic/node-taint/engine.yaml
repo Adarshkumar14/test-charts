@@ -4,6 +4,11 @@ metadata:
   name: nginx-chaos
   namespace: default
 spec:
+  components:
+    runner:
+      # secret name for the runner image, if using private registry
+      imagePullSecrets:
+      - name: docker-vendor
   # It can be active/stop
   engineState: 'active'
   #ex. values: ns1:name=percona,ns2:run=nginx 
@@ -13,6 +18,9 @@ spec:
     - name: node-taint
       spec:
         components:
+          # secret name for the experiment image, if using private registry
+          experimentImagePullSecrets:
+          - name: docker-vendor
         # nodeSelector: 
         #   # provide the node labels
         #   kubernetes.io/hostname: 'node02'        
@@ -28,4 +36,6 @@ spec:
              # key=value:effect or key:effect
             - name: TAINTS
               value: 'node.kubernetes.io/unreachable:NoExecute'
-              
+
+            - name: LIB_IMAGE
+              value: 'scbs.jfrog.io/docker-remote/chaosnative/go-runner:2.8.0'

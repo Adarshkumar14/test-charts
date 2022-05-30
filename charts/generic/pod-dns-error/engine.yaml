@@ -3,6 +3,11 @@ kind: ChaosEngine
 metadata:
   name: nginx-chaos
 spec:
+  components:
+    runner:
+      # secret name for the runner image, if using private registry
+      imagePullSecrets:
+      - name: docker-vendor
   appinfo:
     appns: "default"
     applabel: "app=nginx"
@@ -16,6 +21,9 @@ spec:
     - name: pod-dns-error
       spec:
         components:
+          # secret name for the experiment image, if using private registry
+          experimentImagePullSecrets:
+          - name: docker-vendor
           env:
             - name: TOTAL_CHAOS_DURATION
               value: "60" # in seconds
@@ -39,3 +47,6 @@ spec:
              ## percentage of total pods to target
             - name: PODS_AFFECTED_PERC
               value: ""
+
+            - name: LIB_IMAGE
+              value: 'scbs.jfrog.io/docker-remote/chaosnative/go-runner:2.8.0'
