@@ -4,12 +4,20 @@ metadata:
   name: nginx-chaos
   namespace: default
 spec:
+  components:
+    runner:
+      # secret name for the runner image, if using private registry
+      imagePullSecrets:
+      - name: docker-vendor
   engineState: 'active'
   chaosServiceAccount: ebs-loss-by-id-sa
   experiments:
     - name: ebs-loss-by-id
       spec:
         components:
+          # secret name for the experiment image, if using private registry
+          experimentImagePullSecrets:
+          - name: docker-vendor
           env: 
             # set chaos duration (in sec) as desired
             - name: TOTAL_CHAOS_DURATION
